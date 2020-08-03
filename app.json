@@ -1,0 +1,12 @@
+{
+  "name": "react-to-do-list",
+  "displayName": "react-to-do-list",
+  "expo": {
+    "name": "react-to-do-list",
+    "slug": "react-to-do-list",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
