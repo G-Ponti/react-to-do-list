@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableHighlight, Alert, ScrollView} from 'react-native';
 import Item from './Item';
+import ToDoListDB from './db/ToDoListDB';
 
 export default class ToDoList extends React.Component{
 
@@ -14,7 +15,31 @@ export default class ToDoList extends React.Component{
       focusSearch: false,
       inputSearch: '', //used for resolving a bug on onBlur that caused the text to disapear
       masterReset: false, //used for fix a bug with displaying wrong checked items when clearCompleted called
+      db: new ToDoListDB('todolistDB'),
     }
+  }
+
+  async componentDidMount() {
+    await this.state.db.getAllItems().then(
+      (listDB) => {
+        let items = [], checkedItems = [];
+        if(listDB !== []){
+          for(object of listDB){
+            items.push(object.value);
+            if(object.isChecked === 1) checkedItems.push(object.i-1);
+          }
+        }
+        this.setState(
+          {
+            list: items,
+            visibleList: items,
+            checked: checkedItems,
+          }
+        );
+        console.log(this.state);
+      }
+    );
+    console.log(this.state.checked);
   }
 
   addItem = (event) => {
@@ -78,6 +103,18 @@ export default class ToDoList extends React.Component{
     });
   }
 
+  saveList = () => {
+    this.state.db.clearDB();
+    this.state.list.map((item, index) => {
+      let itemToAdd = {
+        index: index + 1,
+        value: item,
+        isChecked: this.state.checked.indexOf(index)>= 0 ? 1 : 0,
+      }
+      this.state.db.addItem(itemToAdd);
+    });
+  }
+
   render(){
     return(
       <View style={styles.container}>
@@ -130,7 +167,7 @@ export default class ToDoList extends React.Component{
           </TouchableHighlight>
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'orange'}} 
-            onPress={() => console.log(this.state.checked)}
+            onPress={this.saveList}
             >
               <Text 
                 style={styles.buttonText}
@@ -158,6 +195,7 @@ export default class ToDoList extends React.Component{
                     key={index} 
                     value={item} 
                     index={index+1}
+                    isChecked={this.state.checked.indexOf(index) >= 0}
                     setCheckItem={this.checkItem}
                     masterReset={this.state.masterReset} //props for fix a bug with displaying wrong checked items when clearCompleted called
                     setMasterReset={() => this.setState({masterReset: false})}

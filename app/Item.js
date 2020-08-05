@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 
 export default function Item(props){
 
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(props.isChecked);
 
     const checkItem = () => {
         props.setCheckItem(props.index, isChecked ? 'remove' : 'add');
