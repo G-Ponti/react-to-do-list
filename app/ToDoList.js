@@ -8,10 +8,10 @@ export default class ToDoList extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      list: ['to', 'do', 'list'],
+      list: [],
       checked: [],
       itemToAdd: '',
-      visibleList: ['to', 'do', 'list'],
+      visibleList: [],
       focusSearch: false,
       inputSearch: '', //used for resolving a bug on onBlur that caused the text to disapear
       masterReset: false, //used for fix a bug with displaying wrong checked items when clearCompleted called
@@ -36,10 +36,9 @@ export default class ToDoList extends React.Component{
             checked: checkedItems,
           }
         );
-        console.log(this.state);
+
       }
     );
-    console.log(this.state.checked);
   }
 
   addItem = (event) => {
@@ -114,7 +113,7 @@ export default class ToDoList extends React.Component{
       this.state.db.addItem(itemToAdd);
     });
   }
-
+  
   render(){
     return(
       <View style={styles.container}>
@@ -137,6 +136,7 @@ export default class ToDoList extends React.Component{
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'lime'}} 
             onPress={this.addItem}
+            underlayColor="white"
             >
               <Text 
                 style={styles.buttonText}
@@ -149,6 +149,7 @@ export default class ToDoList extends React.Component{
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'red'}} 
             onPress={() => this.setState({visibleList: [], list: [], checked: []})}
+            underlayColor="white"
             >
               <Text 
                 style={styles.buttonText}
@@ -158,7 +159,9 @@ export default class ToDoList extends React.Component{
           </TouchableHighlight>
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'blue'}} 
-            onPress={this.clearCompleted}>
+            onPress={this.clearCompleted}
+            underlayColor="white"
+            >
             <Text 
               style={styles.buttonText}
               >
@@ -168,6 +171,7 @@ export default class ToDoList extends React.Component{
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'orange'}} 
             onPress={this.saveList}
+            underlayColor="white"
             >
               <Text 
                 style={styles.buttonText}
