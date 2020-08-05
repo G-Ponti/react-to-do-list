@@ -136,7 +136,7 @@ export default class ToDoList extends React.Component{
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'lime'}} 
             onPress={this.addItem}
-            underlayColor="white"
+            underlayColor="#00e600"
             >
               <Text 
                 style={styles.buttonText}
@@ -149,7 +149,7 @@ export default class ToDoList extends React.Component{
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'red'}} 
             onPress={() => this.setState({visibleList: [], list: [], checked: []})}
-            underlayColor="white"
+            underlayColor="#b30000"
             >
               <Text 
                 style={styles.buttonText}
@@ -160,7 +160,7 @@ export default class ToDoList extends React.Component{
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'blue'}} 
             onPress={this.clearCompleted}
-            underlayColor="white"
+            underlayColor="#0000b3"
             >
             <Text 
               style={styles.buttonText}
@@ -171,7 +171,7 @@ export default class ToDoList extends React.Component{
           <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'orange'}} 
             onPress={this.saveList}
-            underlayColor="white"
+            underlayColor="#b37400"
             >
               <Text 
                 style={styles.buttonText}
