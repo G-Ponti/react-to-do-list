@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text } from 'react-native';
 
 export default function Item(props){
 
@@ -9,6 +9,14 @@ export default function Item(props){
         props.setCheckItem(props.index, isChecked ? 'remove' : 'add');
         setIsChecked(!isChecked);
     }
+
+    //used for fix a bug with displaying wrong checked items when clearCompleted called
+    useEffect(() => {
+        if(props.masterReset){
+            setIsChecked(false);
+            props.setMasterReset();
+        }
+    });
 
     return(
         <Text 

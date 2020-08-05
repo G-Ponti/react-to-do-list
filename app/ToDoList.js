@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert, ScrollView} from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableHighlight, Alert, ScrollView} from 'react-native';
 import Item from './Item';
 
 export default class ToDoList extends React.Component{
@@ -7,12 +7,13 @@ export default class ToDoList extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      list: ['gigi', 'pippo', 'ah boh'],
+      list: ['to', 'do', 'list'],
       checked: [],
       itemToAdd: '',
-      visibleList: ['gigi', 'pippo', 'ah boh'],
+      visibleList: ['to', 'do', 'list'],
       focusSearch: false,
       inputSearch: '', //used for resolving a bug on onBlur that caused the text to disapear
+      masterReset: false, //used for fix a bug with displaying wrong checked items when clearCompleted called
     }
   }
 
@@ -44,7 +45,6 @@ export default class ToDoList extends React.Component{
         this.setState({
           checked: newChecked,
         })
-        console.log(newChecked);
         break;
       }
       case 'remove':{
@@ -54,7 +54,6 @@ export default class ToDoList extends React.Component{
         this.setState({
           checked: newChecked,
         });
-        console.log(newChecked);
         break;
       }
       default:{
@@ -62,6 +61,21 @@ export default class ToDoList extends React.Component{
         break;
       }
     }
+  }
+
+  clearCompleted = () => {
+    let i=0;
+    let items = this.state.list;
+    for(let index of this.state.checked){
+        items.splice(index-i, 1);
+        i++;
+    }
+    this.setState({
+      checked: [],
+      list: items,
+      visibleList: items,
+      masterReset: true,
+    });
   }
 
   render(){
@@ -83,38 +97,38 @@ export default class ToDoList extends React.Component{
             value={this.state.itemToAdd} 
             onChange={(event) => this.setState({itemToAdd: event.nativeEvent.text})} 
             placeholder={'Add an item'}/>
-          <TouchableOpacity 
+          <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'lime'}} 
             onPress={this.addItem}
             >
               <Text 
                 style={styles.buttonText}
                 >
-                Add
+                Add item
               </Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
         <View style={{...styles.row, marginBottom: 30}}>
-          <TouchableOpacity 
+          <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'red'}} 
-            onPress={() => console.log(ciao)}
+            onPress={() => this.setState({visibleList: [], list: [], checked: []})}
             >
               <Text 
                 style={styles.buttonText}
                 >
                 Empty list
               </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
+          </TouchableHighlight>
+          <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'blue'}} 
-            onPress={() => console.log(ciao)}>
+            onPress={this.clearCompleted}>
             <Text 
               style={styles.buttonText}
               >
               Clear completed
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
+          </TouchableHighlight>
+          <TouchableHighlight 
             style={{...styles.button, backgroundColor: 'orange'}} 
             onPress={() => console.log(this.state.checked)}
             >
@@ -123,7 +137,7 @@ export default class ToDoList extends React.Component{
                 >
                 Save list
               </Text>
-            </TouchableOpacity>
+            </TouchableHighlight>
         </View>
         <ScrollView 
           style={styles.listcontainer}
@@ -145,6 +159,8 @@ export default class ToDoList extends React.Component{
                     value={item} 
                     index={index+1}
                     setCheckItem={this.checkItem}
+                    masterReset={this.state.masterReset} //props for fix a bug with displaying wrong checked items when clearCompleted called
+                    setMasterReset={() => this.setState({masterReset: false})}
                   />
               ))
           }
@@ -209,12 +225,12 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 'auto',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 5,
     height: 30,
     textAlign: 'center',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     borderRadius: 5,
   },
   buttonText: {
